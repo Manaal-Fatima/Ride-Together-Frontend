@@ -3,7 +3,7 @@
 // import { createStackNavigator } from '@react-navigation/stack';
 // import WelcomeScreen from './screens/WelcomeScreen';
 // import FrstScreen from './screens/FrstScreen'
-// import LoginScreen from './screens/LoginScreen';
+// import RegisterScreen from './screens/RegisterScreen';
 // import OtpScreeen from './screens/OtpScreen';
 // // import Home from './screens/Home';
 
@@ -17,34 +17,51 @@
 //         {/* <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/> */}
 //         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
 //         <Stack.Screen name="FrstScreen" component={FrstScreen} options={{ headerShown: false }} />
-//         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+//         <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false }} />
 //         <Stack.Screen name="OtpScreen" component= {OtpScreeen} options={{headerShown:false}}/>
 //       </Stack.Navigator>
 //     </NavigationContainer>
 //   );
 // }
+// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import FindARide from './screens/FindARide';
-import OfferARide from './screens/OfferARide';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 import ManageVehicle from './screens/manageVehicle';
-import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import ManageProfile from './screens/myProfile';
+import OtpScreen from './screens/OtpScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
+import FromLhr from './screens/FromLhr';
+import DorP from './screens/DorP';
+import UserDetails from './screens/UserDetails';
+import FindARide from './screens/FindARide';
+import PublishARide from './screens/PublishARide';
+import DriverDetails from './screens/DriverDetails';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="ManageProfile">
-        {/* <Stack.Screen name="FindARide" component={FindARide} /> */}
-        {/* <Stack.Screen name="OfferARide" component={OfferARide} /> */}
-        {/* <Stack.Screen name="manageVehicle" component={ManageVehicle}/> */}
-        {/* <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="myProfile" component={ManageProfile}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="WelcomeScreen">
+          <Stack.Screen name="DorP" component={DorP} options={{ headerShown: false }} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="OtpScreen" component={OtpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="FromLhr" component={FromLhr} options={{ headerShown: false }} />
+          <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
+          <Stack.Screen name="FindARide" component={FindARide} options={{ headerShown: false }} />
+          <Stack.Screen name="PublishARide" component={PublishARide} options={{ headerShown: false }} />
+          <Stack.Screen name="ManageVehicle" component={ManageVehicle} options={{ headerShown: false }} />
+          <Stack.Screen name="DriverDetails" component={DriverDetails} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

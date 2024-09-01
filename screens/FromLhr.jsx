@@ -1,29 +1,42 @@
-
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function FrstScreen() {
-  const navigation = useNavigation();
+import { useDispatch } from 'react-redux';
 
-  const handleYes = () => {
-    navigation.navigate('LoginScreen');
+import  {setLocation}  from '../redux/screenAction';
+
+export default function FromLhr() {
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleLocationChange = (newLocation) => {
+    dispatch(setLocation(newLocation));
+     navigation.navigate('DorP');
+    
   };
+   
+  
+
   const handleNo = () => {
-    alert( 'Sorry 😕! This app is currently available only for Lahore.');
-  }
+    alert('Sorry 😕! This app is currently available only for Lahore.');
+  };
 
   return (
     <View style={styles.container}>
-          <View style={styles.imageContainer}>
+      <View style={styles.imageContainer}>
         <Image
           source={require('../assets/loc.png')}
           style={styles.image}
         />
       </View>
-      <Text  style={{ fontSize: 38, marginBottom: 80 , fontStyle: 'italic' }} > Are you in Lahore? </Text>
-      <TouchableOpacity style={styles.button} onPress={handleYes}>
-        <Text style={styles.buttonText}>Yes, I'm here </Text>
+      <Text style={{ fontSize: 38, marginBottom: 80, fontStyle: 'italic' }}>Are you in Lahore?</Text>
+      <TouchableOpacity
+          style={styles.button} 
+            onPress={()  => handleLocationChange(("Lahore"))}
+             >
+        <Text style={styles.buttonText}>Yes, I'm here</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.noButton} onPress={handleNo}>
         <Text style={styles.noButtonText}>No</Text>
@@ -52,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 50,
-    marginBottom : 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: 'white',

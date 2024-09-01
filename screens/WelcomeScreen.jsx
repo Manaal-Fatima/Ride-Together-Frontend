@@ -8,7 +8,7 @@ export default function WelcomeScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('FrstScreen');
+      navigation.navigate('RegisterScreen');
     }, 3000);
   }, []);
 

@@ -50,7 +50,7 @@ export default function ManageProfile() {
             // Upload profile image if an image was selected
             if (imageUri) {
                 const formData = new FormData();
-                formData.append('profile-image', {
+                formData.append('images', {
                     uri: imageUri,
                     type: 'image/jpeg', // Adjust MIME type if needed
                     name: 'profile.jpg',

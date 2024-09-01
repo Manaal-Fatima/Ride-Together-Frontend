@@ -1,30 +1,56 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ManageVehicle() {
+  const navigation = useNavigation();
   const [carType, setCarType] = useState('');
-  const [manufacturerName, setManufacturerName] = useState('');
-  const [modelName, setModelName] = useState('');
-  const [modelYear, setModelYear] = useState('');
+  const [vehicleModel, setVehicleModel] = useState('');
   const [vehiclePlateNumber, setVehiclePlateNumber] = useState('');
   const [numberOfSeats, setNumberOfSeats] = useState('');
   const [vehicleColor, setVehicleColor] = useState('');
 
-  const handleSave = () => {
-    // Handle saving of vehicle details
+  const handleSave = async () => {
     const vehicleDetails = {
-      carType,
-      manufacturerName,
-      modelName,
-      modelYear,
-      vehiclePlateNumber,
-      numberOfSeats,
-      vehicleColor,
+      car_type: carType,
+      vehicle_model: vehicleModel,
+      vehicle_plate_number: vehiclePlateNumber,
+      number_of_seats: parseInt(numberOfSeats, 10),
+      vehicle_color: vehicleColor,
     };
-    console.log(vehicleDetails);
-    // Add your save functionality here, e.g., sending data to server or storing locally
+  
+    try {
+      // Retrieve the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('Token not found');
+      }
+  
+      // Make the API request with the Authorization header
+      const response = await axios.post(
+        'https://ride-together-mybackend.onrender.com/api/v1/vehicle/vehicle_details_add',
+        vehicleDetails,
+        {
+          headers: {
+            'Authorization': `${token}`, // Include the token in the Authorization header
+            'Content-Type': 'application/json', // Ensure Content-Type is set
+          },
+        }
+      );
+  
+      console.log(response.data);
+      alert('Vehicle details added successfully');
+      navigation.navigate('PublishARide');
+    } catch (error) {
+      console.error('Error response:', error.response ? error.response.data : error.message);
+      alert('Failed to add vehicle details');
+    }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -33,33 +59,20 @@ export default function ManageVehicle() {
         <Picker
           selectedValue={carType}
           style={styles.input}
-          onValueChange={(itemValue, itemIndex) => setCarType(itemValue)}
+          onValueChange={(itemValue) => setCarType(itemValue)}
         >
           <Picker.Item label="Select Car Type" value="" />
-          <Picker.Item label="Sedan" value="Sedan" />
-          <Picker.Item label="SUV" value="SUV" />
-          <Picker.Item label="Truck" value="Truck" />
-          <Picker.Item label="Van" value="Van" />
+          <Picker.Item label="Mehran" value="Sedan" />
+          <Picker.Item label="Suzuki" value="SUV" />
+          <Picker.Item label="Toyota" value="Truck" />
+          <Picker.Item label="Altas" value="Van" />
         </Picker>
       </View>
       <TextInput
         style={styles.input}
-        placeholder="Manufacturer Name"
-        value={manufacturerName}
-        onChangeText={setManufacturerName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Model Name"
-        value={modelName}
-        onChangeText={setModelName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Model Year"
-        value={modelYear}
-        onChangeText={setModelYear}
-        keyboardType="numeric"
+        placeholder="Vehicle Model"
+        value={vehicleModel}
+        onChangeText={setVehicleModel}
       />
       <TextInput
         style={styles.input}
