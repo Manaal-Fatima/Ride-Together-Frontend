@@ -3,55 +3,43 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'reac
 import axios from 'axios'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function RegisterScreen({ navigation }) {
+export default function ForgetPassword({ navigation }) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const [error, setError] = useState('');
 
   const validateForm = () => {
     let error = {};
     if (!email) error.email = 'Email is required';
-    if (!password) error.password = 'Password is required';
+    
     setError(error);
     return Object.keys(error).length === 0;
   }
 
-  const handleLogin = async () => {
+  const handleForget = async () => {
     if (validateForm()) {
+      
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('Token not found');
       try {
-        const res = await axios.post('https://ride-together-mybackend.onrender.com/api/v1/auth/register',
-           { email, password });
-        
-        // Log the entire response object to inspect it
-        console.log('API Response:', res.data);
-    
-        if (res.data.success === true) {  
-          Alert.alert('Registration successful!');
-    
-          const { token } = res.data.data;
-          const id = res.data.data.user._id;
-    
-          if (token && id) {
-            await AsyncStorage.multiSet([['token', token], ['id', id]]);
-            console.log('Token and ID stored successfully:', token, id);
-            navigation.navigate('ForgetPassword');
-          } else {
-            console.log('Token or ID not found in response.');
-            setError('Token or ID not found in response.');
-          }
-        } else {
-          console.log('Registration failed:', res.data.message || 'Something went wrong.');
-          setError(res.data.message || 'Something went wrong.');
+        const response = await axios.post('https://ride-together-mybackend.onrender.com/api/v1/auth/forget',
+           {email},
+        {
+          headers: {
+            Authorization:`${token}`,
+            'Content-Type': 'application/json',
+          },
         }
-      } catch (error) {
-        if (error.response) {
-          console.log('Error during registration:', error.response.data);
-          setError(error.response.data.message || 'An error occurred during registration.');
-        } else {
-          console.log('Error during registration:', error.message);
-          setError('An unexpected error occurred during registration.');
-        }
-      }
+      );
+
+      console.log(response.data);
+      Alert.alert('Success', 'OTP send successfully');
+    } catch (error) {
+      console.error('Error creating ride:', error.response ? error.response.data : error.message);
+      Alert.alert('Error', error.response ? error.response.data.message : error.message);
+    }
+  
+
     }
   };
   
@@ -59,8 +47,8 @@ export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={{ fontSize: 38, marginBottom: 10, fontStyle: 'italic' }}>Join us via Email</Text> 
-        <Text style={{ marginBottom: 30, fontSize: 15, textAlign: 'center' }}>We'll send you a verification code</Text>
+        <Text style={{ fontSize: 38, marginBottom: 10, fontStyle: 'italic' }}>Forgot Password</Text> 
+        <Text style={{ marginBottom: 30, fontSize: 15, textAlign: 'center' }}>Enter your email to receive a password reset code</Text>
       </View>
       <TextInput
         style={styles.input}
@@ -70,15 +58,8 @@ export default function RegisterScreen({ navigation }) {
         value={email}
       />
       {error.email && <Text style={styles.errorText}>{error.email}</Text>}
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        secureTextEntry={true}
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      />
-      {error.password && <Text style={styles.errorText}>{error.password}</Text>}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      
+      <TouchableOpacity style={styles.button} onPress={handleForget}>
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
     </View>
