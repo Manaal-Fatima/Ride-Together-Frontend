@@ -1,14 +1,13 @@
-// FindARide.js
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const OPENROUTESERVICE_API_KEY = '5b3ce3597851110001cf6248973e10c8f9034fc08fe2934c5eeb1a8f';
+
+const OPENROUTESERVICE_API_KEY = '5b3ce3597851110001cf6248973e10c8f9034fc08fe2934c5eeb1a8f';;
 
 export default function FindARide() {
   const navigation = useNavigation();
@@ -16,7 +15,8 @@ export default function FindARide() {
   const [dropLocation, setDropLocation] = useState('');
   const [pickupCoordinates, setPickupCoordinates] = useState(null);
   const [dropCoordinates, setDropCoordinates] = useState(null);
-  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [region, setRegion] = useState({
@@ -26,33 +26,35 @@ export default function FindARide() {
     longitudeDelta: 0.0121,
   });
 
+  // Combine selected date and time
   const handleFindRide = () => {
-    if (pickupCoordinates) {
-      // Navigate to the "View Available Rides" screen and pass the pickup coordinates
-      navigation.navigate('ViewAvailableRides', { pickupCoordinates });
+    const combinedDateTime = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      selectedTime.getHours(),
+      selectedTime.getMinutes()
+    );
+
+    if (pickupCoordinates && combinedDateTime) {
+      navigation.navigate('ViewAvailableRides', { pickupCoordinates, date: combinedDateTime });
     } else {
-      console.error('Pickup location is required');
+      console.error('Pickup location and date are required');
     }
   };
 
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios');
-    setDate(currentDate);
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date) {
+      setSelectedDate(date);
+    }
   };
 
-  const handleTimeChange = (event, selectedTime) => {
-    const currentTime = selectedTime || date;
-    setShowTimePicker(Platform.OS === 'ios');
-    setDate(currentTime);
-  };
-
-  const showDatePickerModal = () => {
-    setShowDatePicker(true);
-  };
-
-  const showTimePickerModal = () => {
-    setShowTimePicker(true);
+  const handleTimeChange = (event, time) => {
+    setShowTimePicker(false);
+    if (time) {
+      setSelectedTime(time);
+    }
   };
 
   const geocodeLocation = async (location, setCoordinates) => {
@@ -86,12 +88,7 @@ export default function FindARide() {
 
   return (
     <View style={styles.container}>
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        region={region}
-        onRegionChangeComplete={setRegion}
-      >
+      <MapView provider={PROVIDER_GOOGLE} style={styles.map} region={region}>
         {pickupCoordinates && (
           <Marker coordinate={pickupCoordinates} pinColor="green" title="Pickup Location" />
         )}
@@ -120,14 +117,14 @@ export default function FindARide() {
           }}
         />
 
-        <TouchableOpacity style={styles.datePickerButton} onPress={showDatePickerModal}>
+        <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowDatePicker(true)}>
           <Icon name="calendar" size={20} color="gray" />
-          <Text style={styles.datePickerText}>{date.toDateString()}</Text>
+          <Text style={styles.datePickerText}>{selectedDate.toDateString()}</Text>
         </TouchableOpacity>
 
         {showDatePicker && (
           <DateTimePicker
-            value={date}
+            value={selectedDate}
             mode="date"
             display="default"
             onChange={handleDateChange}
@@ -136,14 +133,14 @@ export default function FindARide() {
           />
         )}
 
-        <TouchableOpacity style={styles.datePickerButton} onPress={showTimePickerModal}>
+        <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowTimePicker(true)}>
           <Icon name="clock-o" size={20} color="gray" />
-          <Text style={styles.datePickerText}>{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+          <Text style={styles.datePickerText}>{selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
         </TouchableOpacity>
 
         {showTimePicker && (
           <DateTimePicker
-            value={date}
+            value={selectedTime}
             mode="time"
             display="default"
             onChange={handleTimeChange}

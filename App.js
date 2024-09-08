@@ -1,29 +1,4 @@
-// import React from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import WelcomeScreen from './screens/WelcomeScreen';
-// import FrstScreen from './screens/FrstScreen'
-// import RegisterScreen from './screens/RegisterScreen';
-// import OtpScreeen from './screens/OtpScreen';
-// // import Home from './screens/Home';
 
-
-// const Stack = createStackNavigator();
-
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="WelcomeScreen">
-//         {/* <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/> */}
-//         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-//         <Stack.Screen name="FrstScreen" component={FrstScreen} options={{ headerShown: false }} />
-//         <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false }} />
-//         <Stack.Screen name="OtpScreen" component= {OtpScreeen} options={{headerShown:false}}/>
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -41,6 +16,8 @@ import UserDetails from './screens/UserDetails';
 import FindARide from './screens/FindARide';
 import PublishARide from './screens/PublishARide';
 import DriverDetails from './screens/DriverDetails';
+import ViewAvailableRides from './screens/ViewAvailableRides';
+import ChatScreen from "./screens/ChatScreen"
 
 const Stack = createStackNavigator();
 
@@ -59,49 +36,10 @@ export default function App() {
           <Stack.Screen name="PublishARide" component={PublishARide} options={{ headerShown: false }} />
           <Stack.Screen name="ManageVehicle" component={ManageVehicle} options={{ headerShown: false }} />
           <Stack.Screen name="DriverDetails" component={DriverDetails} options={{ headerShown: false }} />
+          <Stack.Screen name="ViewAvailableRides" component={ViewAvailableRides} options={{ headerShown: false }} />
+          <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
-
-
-// import { StatusBar } from "react-native";
-// import { StyleSheet, Text, View } from "react-native";
-// import LottieView from "lottie-react-native";
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.text}>  Ride Together  </Text>
-//       <View style={styles.lott}>
-//         <LottieView
-//           style={{ flex: 1 }}
-//           source={require('./assets/gari.json')}
-//           autoPlay={true}
-//           loop
-//         />
-//       </View>
-//       <StatusBar style="auto" />
-//     </View>
-
-//   )
-// }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#1E90FF',
-//     alignItems: 'center',
-//     justifyContent: 'space-around'
-//   },
-//   text: {
-//     fontSize: 40,
-//     color: 'white'
-
-//   },
-//   lott: {
-//     height: 400,
-//     aspectRatio: 1
-
-//   }
-// })
