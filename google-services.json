@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "118183770265",
+    "project_id": "ridetogethernotification",
+    "storage_bucket": "ridetogethernotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118183770265:android:2c29b99eb342adebb02008",
+        "android_client_info": {
+          "package_name": "com.ridetogether.fyp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4eFLTG9qRaDkQEP-zGLdqxiiQNmTs0Hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

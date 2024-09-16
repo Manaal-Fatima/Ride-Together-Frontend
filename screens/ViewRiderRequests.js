@@ -9,7 +9,7 @@ export default function ViewRiderRequests() {
     const fetchRiderRequests = async () => {
       try {
         const response = await axios.get(
-          'https://ride-together-mybackend.onrender.com/api/v1/vehicle/driver-requests'
+          'https://ride-together-mybackend.onrender.com/api/v1/driver/driver-requests'
         );
         setRideRequests(response.data);
       } catch (error) {
@@ -17,7 +17,7 @@ export default function ViewRiderRequests() {
         Alert.alert('Error', 'Failed to fetch rider requests');
       }
     };
-
+p
     fetchRiderRequests();
   }, []);
 

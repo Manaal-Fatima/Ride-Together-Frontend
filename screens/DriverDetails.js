@@ -11,14 +11,14 @@ export default function DriverDetails() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [cnic, setCnic] = useState('');
-  const [licenseImage, setLicenseImage] = useState(null);
+  // const [licenseImage, setLicenseImage] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   // Function to handle form submission and image upload
   const handleNext = async () => {
     // Check if all fields are filled
-    if (!name || !phone || !cnic || !licenseImage) {
+    if (!name || !phone || !cnic ) {
       Alert.alert('Error', 'Please fill all fields and upload your license image.');
       return;
     }
@@ -38,9 +38,9 @@ export default function DriverDetails() {
       // Step 1: Upload Driver Details
       let driverDetailsResponse;
       try {
-        driverDetailsResponse = await axios.post(
-          `https://ride-together-mybackend.onrender.com/api/v1/driver/driver-details:${id}`, // Corrected URL format
-          {}, // Provide actual data for driver details if needed
+        driverDetailsResponse =  await axios.post(
+          `https://ride-together-mybackend.onrender.com/api/v1/driver/driver-details/${id}`,
+          { name, phone, cnic },
           {
             headers: {
               Authorization: `${token}`,
@@ -60,54 +60,54 @@ export default function DriverDetails() {
         Alert.alert('Error', driverDetailsResponse.data.message || 'Failed to update driver details.');
         return;
       }
-      navigation.navigate('ManageVehicle');
+      navigation.navigate('AppNavigator');
 
       // Step 2: Upload License Image
       // Uncomment this section if you want to handle license image upload
-      /*
-      const formData = new FormData();
-      formData.append('license_image', {
-        uri: licenseImage.uri,
-        name: 'license.jpg', // Ensure the file name has an extension
-        type: 'image/jpeg', // Correct MIME type
-      });
+      
+      // const formData = new FormData();
+      // formData.append('license_image', {
+      //   uri: licenseImage.uri,
+      //   name: 'license.jpg', // Ensure the file name has an extension
+      //   type: 'image/jpeg', // Correct MIME type
+      // });
 
-      // Log the FormData for debugging purposes
-      console.log('FormData:', formData);
+      // // Log the FormData for debugging purposes
+      // console.log('FormData:', formData);
 
-      try {
-        const licenseImageResponse = await axios.post(
-          `https://ride-together-mybackend.onrender.com/api/v1/driver/upload-license-image/${id}`,
-          formData,
-          {
-            headers: {
-              Authorization: `${token}`,
-              // No need to set Content-Type here; Axios will set it automatically.
-            },
-          }
-        );
+      // try {
+      //   const licenseImageResponse = await axios.post(
+      //     `https://ride-together-mybackend.onrender.com/api/v1/driver/upload-license-image/${id}`,
+      //     formData,
+      //     {
+      //       headers: {
+      //         Authorization: `${token}`,
+      //         // No need to set Content-Type here; Axios will set it automatically.
+      //       },
+      //     }
+      //   );
 
         // Log the response to see the server's response
-        console.log('License Image Upload Response:', licenseImageResponse.data);
+        // console.log('License Image Upload Response:', licenseImageResponse.data);
 
-        if (licenseImageResponse.data.success) {
-          Alert.alert(
-            'Success',
-            licenseImageResponse.data.message || 'Driver details updated successfully.'
-          );
-          navigation.navigate('ManageVehicle');
-        } else {
-          Alert.alert(
-            'Error',
-            licenseImageResponse.data.message || 'Failed to upload license image.'
-          );
-        }
-      } catch (error) {
-        // Log error response for detailed error information
-        console.error('License Image Error Response:', error.response);
-        Alert.alert('Error', 'Failed to upload license image.');
-      }
-      */
+    //     if (licenseImageResponse.data.success) {
+    //       Alert.alert(
+    //         'Success',
+    //         licenseImageResponse.data.message || 'Driver details updated successfully.'
+    //       );
+    //       navigation.navigate('ManageVehicle');
+    //     } else {
+    //       Alert.alert(
+    //         'Error',
+    //         licenseImageResponse.data.message || 'Failed to upload license image.'
+    //       );
+    //     }
+    //   } catch (error) {
+    //     // Log error response for detailed error information
+    //     console.error('License Image Error Response:', error.response);
+    //     Alert.alert('Error', 'Failed to upload license image.');
+    //   }
+      
     } catch (error) {
       // Handle any unexpected errors
       if (error.response) {
@@ -177,18 +177,22 @@ export default function DriverDetails() {
         value={cnic}
       />
 
-      <TouchableOpacity style={styles.imagePickerButton} onPress={pickImage}>
+      {/* <TouchableOpacity style={styles.imagePickerButton} onPress={pickImage}>
         <Text style={styles.buttonText}>Upload License Image</Text>
       </TouchableOpacity>
 
       {/* Display the selected image, if available */}
-      {licenseImage && (
+      {/* {licenseImage && (
         <Image source={{ uri: licenseImage.uri }} style={styles.imagePreview} />
       )}
 
       <TouchableOpacity style={styles.button} onPress={handleNext}>
         <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */} 
+       <TouchableOpacity style={styles.button} onPress={handleNext}>
+         <Text style={styles.buttonText}>Next</Text
+         ></TouchableOpacity>
+        
     </View>
   );
 }

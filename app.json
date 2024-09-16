@@ -18,6 +18,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.ridetogether.fyp",  
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
