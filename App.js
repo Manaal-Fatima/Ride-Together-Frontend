@@ -1,58 +1,71 @@
-import React from "react";
-import { Provider } from "react-redux";
-import Ride from "./screens/OfferRide";
-import { NavigationContainer, useNavigation,DrawerActions} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
- import AnimationPrac from "./screens/AnimationPrac";
-import DrawerContent from './DrawerContent';
-import WelcomeScreen from './map/WelcomeScreen';
-import  Tracking from './map/mapTracking';
-import  TrackEvent from './map/hello';
-import VehicleDetails from "./screens/VehicleDetails";
-import RegisterScreen from './screens/RegisterScreen';
-import Profile from "./screens/Profile";
-import OtpCode from'./screens/OtpCode'
-import OTPInputScreen from './screens/OtpCode';
-import LocationScreen from './redux/Location';
-import ViewStateScreen from './redux/Head';
-import  Navigation  from "./navigation";
-import UserDetails from "./redux/ContactInfo";
-import DorP from './redux/UserType';
-import Messages from "./screens/Messages";
-function App () {
-  // <DateTime/>
-  // <AnimationPrac/>
-// /* <CountryExample/> */}
-
+import React, { useEffect } from 'react';
+import { Platform, Alert } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+import DriverDetails from './screens/DriverDetails'; // Import your Messages screen
+import Messages from './screens/Messages';
 const Stack = createNativeStackNavigator();
 
+export default function App() {
+  useEffect(() => {
+    const checkInitialNotification = async () => {
+      const initialNotification = await messaging().getInitialNotification();
+      if (initialNotification) {
+        console.log('Initial notification:', initialNotification);
+        // Handle navigation or other logic based on notification data
+      }
+    };
 
-return (
-  // <NavigationContainer>
-  //    <Stack.Navigator>
-  //     <Stack.Screen name="Register" component={RegisterScreen} />
-  //     {/* <Stack.Screen name="OtpCode" component={OtpCode} /> */}
-  //     <Stack.Screen name="Profile" component={Profile} />
-  // </Stack.Navigator>
-  //  </NavigationContainer>
-  //  <OtpCode/>
-     <Messages/>
-            // <Profile/>
-            // <ViewStateScreen/>
-            // <UserDetails/>
-            // <DorP/>
+    checkInitialNotification();
+    // Request permission for notifications and get token
+    const requestNotificationPermissions = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-);
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+        const fcmToken = await messaging().getToken();
+        console.log('FCM Token:', fcmToken); // Check if the token is generated
+      } else {
+        console.log('FCM Permission denied');
+      }
+    };
+
+    requestNotificationPermissions();
+
+    // Configure the notification channel for Android
+    PushNotification.createChannel({
+      channelId: 'default-channel-id',
+      channelName: 'Default Channel',
+      channelDescription: 'A default channel for notifications',
+      soundName: 'default',
+      importance: 4, // High importance
+    });
+
+    // Handle notifications when the app is in the background
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+
+  }, []);
+
+  // Dummy function for navigation when clicking a notification
+  // const navigateToNotification = (data) => {
+  //   // Handle navigation to specific screen based on notification data
+  //   console.log('Navigating to notification screen with data:', data);
+  //   // Implement navigation logic here, such as:
+  //   // navigation.navigate('NotificationScreen', { data });
+  // };
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Messages" component={Messages} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
-
-    // <VehicleDetails/>
-    // <OTPInputScreen/>
-
-
-
-export default App;
-  
-
-
-
-

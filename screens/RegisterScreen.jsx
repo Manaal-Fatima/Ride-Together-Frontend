@@ -34,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
           if (token && id) {
             await AsyncStorage.multiSet([['token', token], ['id', id]]);
             console.log('Token and ID stored successfully:', token, id);
-            navigation.navigate('ForgetPassword');
+            navigation.navigate('Messages');
           } else {
             console.log('Token or ID not found in response.');
             setError('Token or ID not found in response.');

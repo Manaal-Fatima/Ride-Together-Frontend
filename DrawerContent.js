@@ -7,10 +7,10 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DrawerList = [
-  {icon: 'clockcircleo', label: 'History', navigateTo: 'Home'},
-  {icon: 'car', label: 'manageRide', navigateTo: 'Profile'},
-  {icon: 'setting', label: 'Settings', navigateTo: 'User'},
-  {icon: 'infocirlceo', label: 'FAQ', navigateTo: ''},
+  {icon: 'car', label: 'PublishRide', navigateTo: 'PublishRide'},
+  {icon: 'car', label: 'ManageVehicle', navigateTo: 'ManageVehicle'},
+  {icon: 'setting', label: 'Profile', navigateTo: 'DriverDetails'},
+  
 ];
 // layput of our drawer items
 const DrawerLayout = ({icon, label, navigationTo}) => {

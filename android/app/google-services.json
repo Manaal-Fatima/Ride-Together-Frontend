@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "3904034848",
+    "project_id": "push-notification-6f275",
+    "storage_bucket": "push-notification-6f275.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3904034848:android:a9384f50713fcd887d0445",
+        "android_client_info": {
+          "package_name": "com.iqraaslam.StickerSmash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm9Yq3Ks3jJq0kPWQ78auVSczIt10t1s8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
