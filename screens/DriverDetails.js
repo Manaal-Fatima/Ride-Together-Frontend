@@ -60,7 +60,7 @@ export default function DriverDetails() {
         Alert.alert('Error', driverDetailsResponse.data.message || 'Failed to update driver details.');
         return;
       }
-      navigation.navigate('AppNavigator');
+      navigation.navigate('ManageVehicle');
 
       // Step 2: Upload License Image
       // Uncomment this section if you want to handle license image upload

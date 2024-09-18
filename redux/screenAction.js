@@ -2,19 +2,19 @@ export const SET_LOCATION = 'SET_LOCATION';
 export const SET_USER_TYPE = 'SET_USER_TYPE';
 export const SET_CONTACT_INFO = 'SET_CONTACT_INFO';
 
-export const setLocation = (location) => ({
+export const setLocation = (city) => ({
   type: SET_LOCATION,
-  payload: location,
+  payload: city,
 });
 
-export const setUserType = (userType) => ({
+export const setUserType = (role) => ({
   type: SET_USER_TYPE,
-  payload: userType,
+  payload: role,
 });
 
-export const setContactInfo = (name, phoneNumber) => ({
+export const setContactInfo = (full_name, phone_number) => ({
   type: SET_CONTACT_INFO,
-  payload: { name, phoneNumber },
+  payload: { full_name, phone_number },
 });
 
 

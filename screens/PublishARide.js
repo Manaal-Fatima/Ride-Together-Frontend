@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import React, { useState, useLayoutEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import OpenRouteService from 'openrouteservice-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
-export default function PublishARide() {
+export default function PublishARide({ navigation }) {
   const [pickupLocation, setPickupLocation] = useState('');
   const [dropLocation, setDropLocation] = useState('');
   const [date, setDate] = useState(new Date());
@@ -16,6 +17,20 @@ export default function PublishARide() {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const ORS_API_KEY = '5b3ce3597851110001cf6248973e10c8f9034fc08fe2934c5eeb1a8f';
+
+  // Add a custom header button using useLayoutEffect
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ViewRiderRequests')}
+          style={styles.headerButton}
+        >
+          <Text style={styles.headerButtonText}>View Requests</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const geocodeLocation = async (location) => {
     if (!location) throw new Error('Location is required for geocoding');
@@ -45,18 +60,23 @@ export default function PublishARide() {
       const dropCoords = await geocodeLocation(dropLocation);
 
       // Format the date and time as required by the backend
-      const formattedDate = date.toDateString(); // e.g., "Sat Aug 24 2024"
+      const formattedDate = date.toDateString();
       const formattedStartTime = time.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true,
       });
-      const formattedEndTime = formattedStartTime; // Adjust if end time differs
+      const formattedEndTime = formattedStartTime;
 
-      // Create ride details matching backend expectations
       const rideDetails = {
-        pickup_location: pickupCoords,
-        dropLocation: dropCoords,
+        pickup_location: {
+          type: 'Point',
+          coordinates: pickupCoords,
+        },
+        dropLocation: {
+          type: 'Point',
+          coordinates: dropCoords,
+        },
         date: formattedDate,
         starttime: formattedStartTime,
         endtime: formattedEndTime,
@@ -197,6 +217,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontSize: 16,
+  },
+  headerButton: {
+    marginRight: 10,
+  },
+  headerButtonText: {
+    color: '#007bff',
     fontSize: 16,
   },
 });

@@ -10,29 +10,29 @@ export default function DorP() {
 
   const handleUserType = (userType) => {
     dispatch(setUserType(userType));
-    if (userType === 'Passenger') {
+    if (userType === 'passenger') {
       navigation.navigate('UserDetails');
-    } else if (userType === 'Driver') {
+    } else if (userType === 'driver') {
       navigation.navigate('DriverDetails');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.questionText}>Are you a passenger or a Driver?</Text>
-      <Image
+      <Text style={styles.questionText}>Are you a passenger or a driver?</Text>
+      {/* <Image
         source={require('../assets/PD.jpg')} // Replace with your image path
         style={styles.image}
-      />
+      /> */}
       <TouchableOpacity
         style={[styles.button, styles.passengerButton]}
-        onPress={() => handleUserType('Passenger')}
+        onPress={() => handleUserType('passenger')}
       >
         <Text style={styles.buttonText}>Passenger</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, styles.riderButton]}
-        onPress={() => handleUserType('Driver')}
+        onPress={() => handleUserType('driver')}
       >
         <Text style={styles.buttonText}>Driver</Text>
       </TouchableOpacity>

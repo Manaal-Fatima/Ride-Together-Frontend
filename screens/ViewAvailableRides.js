@@ -89,14 +89,42 @@ export default function ViewAvailableRides({ route, navigation }) {
   );
 
   // Function to handle sending request
-  const handleSendRequest = (driverId) => {
-    // Logic for sending request to the driver
-    Alert.alert('Request Sent', `Request sent to driver with ID: ${driverId}`);
+  const handleSendRequest = async (driverId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'Token not found');
+        return;
+      }
+  
+      const response = await axios.post(
+        'https://ride-together-mybackend.onrender.com/api/v1/ride/send-request',
+        {
+          driverId: driverId,
+          passengerId: 'yourPassengerId', // Replace with actual passenger ID
+          pickupLocation: 'yourPickupLocation', // Replace with actual pickup location
+          requestedDate: new Date().toISOString().split('T')[0], // Today's date
+          requestedTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), // Current time
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      Alert.alert('Request Sent', response.data.message);
+    } catch (error) {
+      console.error('Error sending request:', error.response?.data || error.message);
+      Alert.alert('Error', 'Failed to send request');
+    }
   };
+  
 
   // Function to handle making a call
   const handleCallDriver = (phoneNumber) => {
-    const phoneUrl = `tel:${phoneNumber}`;
+    const phoneUrl = `tel:``${phoneNumber}```;
     Linking.openURL(phoneUrl).catch((err) => Alert.alert('Error', 'Failed to make the call'));
   };
 
