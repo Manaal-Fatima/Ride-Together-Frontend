@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -67,11 +67,24 @@ export default function ViewRiderRequests() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Rider Requests</Text>
-      <Button title="Fetch Rider Requests" onPress={fetchRiderRequests} />
+     
+
+      {/* Static Placeholder View for Default Request */}
+      <View style={styles.placeholderRequestContainer}>
+        <Text style={styles.requestText}>Pickup: Gulshan Ravi </Text>
+        <Text style={styles.requestText}>Dropoff:  Samnabad </Text>
+        <Text style={styles.requestText}>Seats: 4 </Text>
+        <Text style={styles.requestText}>Price per Seat: 200 </Text>
+        <TouchableOpacity
+          style={styles.requestButton}
+          onPress={() => handleSendRequest(item.driverId)}
+        >
+          <Text style={styles.buttonText}>Book/Accept</Text>
+        </TouchableOpacity>
+      </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#167E72" />
       ) : rideRequests.length > 0 ? (
         <FlatList
           data={rideRequests}
@@ -79,16 +92,38 @@ export default function ViewRiderRequests() {
           keyExtractor={(item, index) => item._id || index.toString()}
         />
       ) : (
-        <Text style={styles.noRequestsText}>No rider requests available</Text>
+        <Text style={styles.noRequestsText}></Text>
       )}
+       <TouchableOpacity style={styles.btn} onPress={fetchRiderRequests}>
+        <Text style={styles.btnText}>Fetch Rider Requests</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 24 },
   requestContainer: { backgroundColor: '#fff', padding: 16, borderRadius: 8, marginBottom: 16 },
+  placeholderRequestContainer: { 
+    backgroundColor: '#e0e0e0', 
+    padding: 16, 
+    borderRadius: 8, 
+    marginBottom: 16 
+  },
   requestText: { fontSize: 16, marginBottom: 8 },
   noRequestsText: { fontSize: 18, textAlign: 'center', marginTop: 20 },
+  btn: {
+    backgroundColor: '#167E72',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });

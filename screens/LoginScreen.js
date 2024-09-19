@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
           const { token, user } = res.data.data;
           if (token && user._id) {
             await AsyncStorage.multiSet([['token', token], ['id', user._id]]);
-            navigation.navigate('UserDetails'); // Replace 'HomeScreen' with the screen you want to navigate to
+            navigation.navigate('FindARide'); // Replace 'HomeScreen' with the screen you want to navigate to
           }
         } else {
           setError(res.data.message || 'Login failed.');

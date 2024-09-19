@@ -17,7 +17,7 @@ import FindARide from './screens/FindARide';
 import PublishARide from './screens/PublishARide';
 import DriverDetails from './screens/DriverDetails';
 import ViewAvailableRides from './screens/ViewAvailableRides';
-import ChatScreen from './screens/ChatScreen';
+import SuccessScreen from './SuccessScreen';
 import LoginScreen from './screens/LoginScreen';
 import StateScreen from './screens/StateScreen';
 import ViewRiderRequests from './screens/ViewRiderRequests'; // Import this if it's in a separate file
@@ -39,6 +39,7 @@ export default function App() {
           <Stack.Screen name="ManageVehicle" component={ManageVehicle} options={{ headerShown: false }} />
           <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
           <Stack.Screen name="FindARide" component={FindARide} options={{ headerShown: false }} />
+          <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ headerShown: false }} />
           <Stack.Screen
             name="PublishARide"
             component={PublishARide}

@@ -100,6 +100,7 @@ export default function PublishARide({ navigation }) {
 
       console.log(response.data);
       Alert.alert('Success', 'Ride created successfully');
+      navigation.navigate('SuccessScreen');
     } catch (error) {
       console.error('Error creating ride:', error.response ? error.response.data : error.message);
       Alert.alert('Error', error.response ? error.response.data.data : error.message);

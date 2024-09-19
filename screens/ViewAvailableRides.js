@@ -91,18 +91,37 @@ export default function ViewAvailableRides({ route, navigation }) {
   // Function to handle sending request
   const handleSendRequest = async (driverId) => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      // Retrieve token and passengerId from AsyncStorage
+      const [tokenData, idData] = await AsyncStorage.multiGet(['token', 'id']);
+      const token = tokenData[1];
+      const passengerId = idData[1];
+  
+      console.log('Token:', token);
+      console.log('Passenger ID:', passengerId);
+      
+      const pickupLocation = route.params.pickupCoordinates; // Get pickup location from route.params
+  
       if (!token) {
         Alert.alert('Error', 'Token not found');
         return;
       }
+      
+      if (!passengerId) {
+        Alert.alert('Error', 'Passenger ID not found');
+        return;
+      }
+  
+      if (!pickupLocation) {
+        Alert.alert('Error', 'Pickup location not found');
+        return;
+      }
   
       const response = await axios.post(
-        'https://ride-together-mybackend.onrender.com/api/v1/ride/send-request',
+        'https://ride-together-mybackend.onrender.com/api/v1/vehicle/send-request',
         {
           driverId: driverId,
-          passengerId: 'yourPassengerId', // Replace with actual passenger ID
-          pickupLocation: 'yourPickupLocation', // Replace with actual pickup location
+          passengerId: passengerId, // Use the passengerId from AsyncStorage
+          pickupLocation: pickupLocation, // Use the pickup location from route.params
           requestedDate: new Date().toISOString().split('T')[0], // Today's date
           requestedTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), // Current time
         },
@@ -121,16 +140,20 @@ export default function ViewAvailableRides({ route, navigation }) {
     }
   };
   
+  
+  
+  
 
   // Function to handle making a call
   const handleCallDriver = (phoneNumber) => {
-    const phoneUrl = `tel:``${phoneNumber}```;
+    const phoneUrl = `tel:${phoneNumber || '03234117247'}`; // Use backticks for template literals
     Linking.openURL(phoneUrl).catch((err) => Alert.alert('Error', 'Failed to make the call'));
   };
+  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Available Rides</Text>
+     
       <FlatList
         data={availableRides}
         renderItem={renderRide}
