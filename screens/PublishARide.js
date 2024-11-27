@@ -63,10 +63,15 @@ export default function PublishARide() {
         Alert.alert('Error', 'All fields are required.');
         return;
       }
-
-      const pickupCoords = await geocodeLocation(pickupLocation);
-      const dropCoords = await geocodeLocation(dropLocation);
-
+  
+      // Concatenate "Lahore" with the input locations
+      const fullPickupLocation = `${pickupLocation}, Lahore`;
+      const fullDropLocation = `${dropLocation}, Lahore`;
+  
+      // Geocode the concatenated locations
+      const pickupCoords = await geocodeLocation(fullPickupLocation);
+      const dropCoords = await geocodeLocation(fullDropLocation);
+  
       const formattedDate = date.toDateString();
       const formattedStartTime = startTime.toLocaleTimeString([], {
         hour: '2-digit',
@@ -78,7 +83,7 @@ export default function PublishARide() {
         minute: '2-digit',
         hour12: true,
       });
-
+  
       const rideDetails = {
         pickup_location: { type: 'Point', coordinates: pickupCoords },
         dropLocation: { type: 'Point', coordinates: dropCoords },
@@ -88,16 +93,16 @@ export default function PublishARide() {
         numSeats: parseInt(seats, 10),
         pricePerSeat: parseFloat(pricePerSeat),
       };
-
+  
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('Token not found');
-
+  
       const response = await axios.post(
         'https://ride-together-mybackend-manaal.onrender.com/api/v1/vehicle/publish-ride',
         rideDetails,
         { headers: { Authorization: `${token}`, 'Content-Type': 'application/json' } }
       );
-
+  
       console.log('API Response:', response.data);
       const vehicleId = response.data.data.ride.vehicleId;
       if (vehicleId) {
@@ -112,6 +117,7 @@ export default function PublishARide() {
       Alert.alert('Error', error.response?.data.message || error.message);
     }
   };
+  
 
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);

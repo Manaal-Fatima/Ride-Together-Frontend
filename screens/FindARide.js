@@ -98,24 +98,28 @@ export default function FindARide() {
       </MapView>
 
       <View style={styles.formContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Select Pickup Location"
-          value={pickupLocation}
-          onChangeText={(text) => {
-            setPickupLocation(text);
-            geocodeLocation(text, setPickupCoordinates);
-          }}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Select Drop Location"
-          value={dropLocation}
-          onChangeText={(text) => {
-            setDropLocation(text);
-            geocodeLocation(text, setDropCoordinates);
-          }}
-        />
+      <TextInput
+  style={styles.input}
+  placeholder="Select Pickup Location"
+  value={pickupLocation}
+  onChangeText={(text) => {
+    const updatedText = `${text} Lahore`; // Automatically append 'Lahore'
+    setPickupLocation(updatedText);
+    geocodeLocation(updatedText, setPickupCoordinates);
+  }}
+/>
+<TextInput
+  style={styles.input}
+  placeholder="Select Drop Location"
+  value={dropLocation}
+  onChangeText={(text) => {
+    const updatedText = `${text} Lahore`; // Automatically append 'Lahore'
+    setDropLocation(updatedText);
+    geocodeLocation(updatedText, setDropCoordinates);
+  }}
+/>
+
+      
 
         <TouchableOpacity style={styles.datePickerButton} onPress={() => setShowDatePicker(true)}>
           <Icon name="calendar" size={20} color="gray" />
