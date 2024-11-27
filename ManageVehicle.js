@@ -32,7 +32,7 @@ export default function ManageVehicle() {
   
       // Make the API request with the Authorization header
       const response = await axios.post(
-        'https://ride-together-mybackend.onrender.com/api/v1/vehicle/vehicle_details_add',
+        'https://ride-together-mybackend-manaal.onrender.com/api/v1/vehicle/vehicle_details_add',
         vehicleDetails,
         {
           headers: {
@@ -54,6 +54,7 @@ export default function ManageVehicle() {
 
   return (
     <View style={styles.container}>
+      
       <Text style={styles.title}>Vehicle Details</Text>
       <View style={styles.pickerContainer}>
         <Picker

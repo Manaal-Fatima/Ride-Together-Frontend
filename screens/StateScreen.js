@@ -11,12 +11,13 @@ const StateScreen = () => {
   const role = useSelector((state) => state.role);
   const full_name = useSelector((state) => state.full_name);
   const phone_number = useSelector((state) => state.phone_number);
+  const gender = useSelector((state) => state.gender);
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('Token not found');
-      const response = await axios.patch('https://ride-together-mybackend.onrender.com/api/v1/user/user-details-add', {
+      const response = await axios.patch('https://ride-together-mybackend-manaal.onrender.com/api/v1/user/user-details-add', {
         full_name,
         phone_number,
         city,
@@ -58,6 +59,8 @@ const StateScreen = () => {
       
       <Text style={styles.label}>Phone Number:</Text>
       <Text style={styles.value}>{phone_number}</Text>
+      <Text style={styles.label}>Gender:</Text>
+      <Text style={styles.value}>{gender}</Text>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>

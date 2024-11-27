@@ -38,7 +38,7 @@ export default function OtpCode() {
       console.log('Request Config:', config);
   
       const response = await axios.post(
-        'https://ride-together-mybackend.onrender.com/api/v1/auth/verify-otp',
+        'https://ride-together-mybackend-manaal.onrender.com/api/v1/auth/verify-otp',
         { otp_code: otpCode },
         config
       );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet ,  Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import { setContactInfo } from '../redux/screenAction';
 export default function UserDetails() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [gender, setgender] = useState('');
+
 
   // Retrieve city and role from Redux store
   const city = useSelector((state) => state.city);
@@ -22,9 +24,10 @@ export default function UserDetails() {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('Token not found');
-      const response = await axios.patch('https://ride-together-mybackend.onrender.com/api/v1/user/user-details-add', {
+      const response = await axios.patch('https://ride-together-mybackend-manaal.onrender.com/api/v1/user/user-details-add', {
         full_name: name,
         phone_number: phone,
+        gender: gender,
         city,  // Use city from Redux
         role,  // Use role from Redux
       },
@@ -37,7 +40,7 @@ export default function UserDetails() {
 
       if (response.data.success) {
         // Save data to Redux
-        dispatch(setContactInfo(name, phone));
+        dispatch(setContactInfo(name, phone, gender));
         console.log(response.data);
 
         // Navigate to the next screen
@@ -46,11 +49,9 @@ export default function UserDetails() {
         console.log('Error', response.data.message || 'Failed to save details.');
       }
     } catch (error) {
-      if (error.response) {
-        console.log('Error', error.response.data.message || 'Failed to save details.');
-      } else {
-        console.log('Error', 'An unexpected error occurred.');
-      }
+      const msg = error.response?.data.message || 'An error occurred .'
+        Alert.alert(msg);
+        setError(msg);
     }
   };
 
@@ -73,6 +74,14 @@ export default function UserDetails() {
         keyboardType="phone-pad"
         onChangeText={text => setPhone(text)}
         value={phone}
+      />
+   
+      <TextInput
+        style={styles.input}
+        placeholder="Gender"
+        placeholderTextColor="#999"
+        onChangeText={text => setgender(text)}
+        value={gender}
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>

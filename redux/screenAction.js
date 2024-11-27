@@ -12,9 +12,9 @@ export const setUserType = (role) => ({
   payload: role,
 });
 
-export const setContactInfo = (full_name, phone_number) => ({
+export const setContactInfo = (full_name, phone_number, gender) => ({
   type: SET_CONTACT_INFO,
-  payload: { full_name, phone_number },
+  payload: { full_name, phone_number, gender },
 });
 
 

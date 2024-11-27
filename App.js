@@ -22,6 +22,9 @@ import LoginScreen from './screens/LoginScreen';
 import StateScreen from './screens/StateScreen';
 import ViewRiderRequests from './screens/ViewRiderRequests'; // Import this if it's in a separate file
 import ManageVehicle from './ManageVehicle';
+import ViewBookedPassengers from './screens/ViewBookedPassengers';
+import ForgotPassword from './screens/ForgotPassword';
+import ResetPassword from './screens/ResetPassword';
 
 const Stack = createStackNavigator();
 
@@ -29,8 +32,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="WelcomeScreen">
+        <Stack.Navigator initialRouteName="ManageProfile">
           <Stack.Screen name="DorP" component={DorP} options={{ headerShown: false }} />
+          <Stack.Screen name="ViewBookedPassengers" component={ViewBookedPassengers}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false }} />
           <Stack.Screen name="OtpScreen" component={OtpScreen} options={{ headerShown: false }} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
@@ -40,6 +44,11 @@ export default function App() {
           <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
           <Stack.Screen name="FindARide" component={FindARide} options={{ headerShown: false }} />
           <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
+          <Stack.Screen name="myProfile" component={ManageProfile} options={{ headerShown: false }} />
+          
+
           <Stack.Screen
             name="PublishARide"
             component={PublishARide}

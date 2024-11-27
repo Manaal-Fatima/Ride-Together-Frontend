@@ -19,7 +19,7 @@ export default function RegisterScreen({ navigation }) {
   const handleRegister = async () => {
     if (validateForm()) {
       try {
-        const res = await axios.post('https://ride-together-mybackend.onrender.com/api/v1/auth/register', { email, password });
+        const res = await axios.post('https://ride-together-mybackend-manaal.onrender.com/api/v1/auth/register', { email, password });
         
         if (res.data.success === true) {  
           Alert.alert('Registration successful!');
@@ -37,7 +37,9 @@ export default function RegisterScreen({ navigation }) {
           setError(res.data.message || 'Something went wrong.');
         }
       } catch (error) {
-        setError(error.response?.data.message || 'An error occurred during registration.');
+        const msg = error.response?.data.message || 'An error occurred during registration.'
+        Alert.alert(msg);
+        setError(msg);
       }
     }
   };

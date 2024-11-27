@@ -18,7 +18,7 @@ export const reducer = (state = initialState, action) => {
       return { ...state, role: action.payload };
      
     case SET_CONTACT_INFO:
-      return { ...state, full_name: action.payload.full_name, phone_number: action.payload.phone_number };
+      return { ...state, full_name: action.payload.full_name, phone_number: action.payload.phone_number, gender: action.payload.gender};
     default:
       return state;
   }
