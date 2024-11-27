@@ -19,7 +19,7 @@ export default function RegisterScreen({ navigation }) {
   const handleRegister = async () => {
     if (validateForm()) {
       try {
-        const res = await axios.post('https://ride-together-mybackend.onrender.com/api/v1/auth/register', { email, password });
+        const res = await axios.post('https://ride-together-mybackend-manaal.onrender.com/api/v1/auth/register', { email, password });
         
         if (res.data.success === true) {  
           Alert.alert('Registration successful!');
