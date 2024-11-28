@@ -9,8 +9,7 @@ export default function ManageProfile() {
     const [checked, setChecked] = useState(''); // State for radio button selection
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [profileImage, setProfileImage] = useState('https://t.ly/6f2ou');
-    const [imageUri, setImageUri] = useState(null); // Store image URI for upload
+    
 
     const handleImagePick = async () => {
         if (Platform.OS !== 'web') {

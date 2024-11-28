@@ -17,11 +17,7 @@ export default function DriverDetails({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Drawer Toggle Icon */}
-      <TouchableOpacity onPress={() => navigation.getParent()?.openDrawer()} style={styles.drawerToggle}>
-        <Ionicons name="menu" size={24} color="#000" />
-      </TouchableOpacity>
-
+     
       <Text style={styles.headerText}>Welcome to Ride Together</Text>
       <Text style={styles.subHeaderText}>Tell us a little bit about yourself</Text>
 

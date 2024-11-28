@@ -102,22 +102,27 @@ export default function FindARide() {
   style={styles.input}
   placeholder="Select Pickup Location"
   value={pickupLocation}
-  onChangeText={(text) => {
-    const updatedText = `${text} Lahore`; // Automatically append 'Lahore'
-    setPickupLocation(updatedText);
-    geocodeLocation(updatedText, setPickupCoordinates);
+  onChangeText={setPickupLocation}
+  onBlur={() => {
+    if (!pickupLocation.endsWith('Lahore')) {
+      setPickupLocation(`${pickupLocation} Lahore`);
+      geocodeLocation(`${pickupLocation} Lahore`, setPickupCoordinates);
+    }
   }}
 />
 <TextInput
   style={styles.input}
   placeholder="Select Drop Location"
   value={dropLocation}
-  onChangeText={(text) => {
-    const updatedText = `${text} Lahore`; // Automatically append 'Lahore'
-    setDropLocation(updatedText);
-    geocodeLocation(updatedText, setDropCoordinates);
+  onChangeText={setDropLocation}
+  onBlur={() => {
+    if (!dropLocation.endsWith('Lahore')) {
+      setDropLocation(`${dropLocation} Lahore`);
+      geocodeLocation(`${dropLocation} Lahore`, setDropCoordinates);
+    }
   }}
 />
+
 
       
 

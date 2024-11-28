@@ -63,15 +63,15 @@ export default function PublishARide() {
         Alert.alert('Error', 'All fields are required.');
         return;
       }
-  
+
       // Concatenate "Lahore" with the input locations
-      const fullPickupLocation = `${pickupLocation}, Lahore`;
-      const fullDropLocation = `${dropLocation}, Lahore`;
-  
+      const fullPickupLocation = {pickupLocation};
+      const fullDropLocation = {dropLocation};
+
       // Geocode the concatenated locations
       const pickupCoords = await geocodeLocation(fullPickupLocation);
       const dropCoords = await geocodeLocation(fullDropLocation);
-  
+
       const formattedDate = date.toDateString();
       const formattedStartTime = startTime.toLocaleTimeString([], {
         hour: '2-digit',
@@ -83,7 +83,7 @@ export default function PublishARide() {
         minute: '2-digit',
         hour12: true,
       });
-  
+
       const rideDetails = {
         pickup_location: { type: 'Point', coordinates: pickupCoords },
         dropLocation: { type: 'Point', coordinates: dropCoords },
@@ -93,16 +93,16 @@ export default function PublishARide() {
         numSeats: parseInt(seats, 10),
         pricePerSeat: parseFloat(pricePerSeat),
       };
-  
+
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('Token not found');
-  
+
       const response = await axios.post(
         'https://ride-together-mybackend-manaal.onrender.com/api/v1/vehicle/publish-ride',
         rideDetails,
         { headers: { Authorization: `${token}`, 'Content-Type': 'application/json' } }
       );
-  
+
       console.log('API Response:', response.data);
       const vehicleId = response.data.data.ride.vehicleId;
       if (vehicleId) {
@@ -117,7 +117,6 @@ export default function PublishARide() {
       Alert.alert('Error', error.response?.data.message || error.message);
     }
   };
-  
 
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
@@ -133,6 +132,10 @@ export default function PublishARide() {
     setShowEndTimePicker(false);
     setEndTime(selectedTime || endTime);
   };
+
+  // Get current date to set as minimum date
+  const today = new Date();
+  const minDate = today.toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
 
   return (
     <View style={styles.container}>
@@ -153,7 +156,13 @@ export default function PublishARide() {
         <Text style={styles.datePickerText}>{date.toDateString()}</Text>
       </TouchableOpacity>
       {showDatePicker && (
-        <DateTimePicker value={date} mode="date" display="default" onChange={onDateChange} />
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+          minimumDate={minDate} // Set the minimum date to today
+        />
       )}
       <TouchableOpacity
         style={styles.datePickerButton}

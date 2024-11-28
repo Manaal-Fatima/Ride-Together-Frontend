@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Linking } from 'react-native';
 import axios from 'axios';
@@ -64,46 +61,32 @@ export default function ViewAvailableRides({ route, navigation }) {
       setLoading(false);
     }
   };
-  // useEffect(() => {
-  //   async function registerForPushNotificationsAsync() {
-  //     if (Platform.OS === 'android') {
-  //       Notifications.setNotificationChannelAsync('default', {
-  //         name: 'default',
-  //         importance: Notifications.AndroidImportance.MAX,
-  //       });
-  //     }
+ 
 
-  //     if (Device.isDevice) {
-  //       const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  //       let finalStatus = existingStatus;
+const savePushTokenToBackend = async (pushToken) => {
+  try {
+   
+    const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'Token not found');
+        return;
+      }
 
-  //       if (existingStatus !== 'granted') {
-  //         const { status } = await Notifications.requestPermissionsAsync();
-  //         finalStatus = status;
-  //       }
+    const response = await axios.patch(
+      'https://ride-together-mybackend-manaal.onrender.com/api/v1/user/token-add',
+      { pushToken: pushToken},
+      { headers: { Authorization: `${token}`, 'Content-Type': 'application/json' } }
+    );
+   
 
-  //       if (finalStatus !== 'granted') {
-  //         console.log('Permission not granted');
-  //         return;
-  //       }
+    console.log('Push token saved successfully:', response.data);
+  } catch (error) {
+    console.error('Error saving push token to backend:', error);
+  }
+};
 
-  //       try {
-  //         const pushTokenString = (await Notifications.getExpoPushTokenAsync()).data;
-  //         setExpoPushToken(pushTokenString);
-  //         console.log('expoPushToken', pushTokenString);
-  //         await AsyncStorage.setItem('expoPushToken', pushTokenString); 
-  //         // await AsyncStorage.setItem('expoPushToken', token); // Save to AsyncStorage
-  //         Alert.alert('Success', 'Push token saved locally'); // Save token to AsyncStorage
-  //       } catch (e) {
-  //         console.log('Error getting push token:', e);
-  //       }
-  //     } else {
-  //       console.log('Must use physical device for push notifications');
-  //     }
-  //   }
-
-  //   registerForPushNotificationsAsync();
-  // }, []);
+  
+ 
   useEffect(() => {
     const registerForPushNotifications = async () => {
       try {
@@ -120,8 +103,9 @@ export default function ViewAvailableRides({ route, navigation }) {
           }
           const token = (await Notifications.getExpoPushTokenAsync()).data;
           console.log('Generated Push Token:', token); // Log the generated token
-          await AsyncStorage.setItem('expoPushToken', token); // Save token in AsyncStorage
-         
+          await savePushTokenToBackend(token); 
+          // Store the token in AsyncStorage
+          
         } else {
           Alert.alert('Error', 'Must use physical device for push notifications');
         }
@@ -131,21 +115,10 @@ export default function ViewAvailableRides({ route, navigation }) {
     };
   
     registerForPushNotifications();
-   // Listen for incoming notifications
-  //  const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-  //   console.log('Notification Received:', notification);
-  // });
-
-  // const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
-  //   console.log('Notification Response:', response);
-  // });
-
-  // return () => {
-  //   Notifications.removeNotificationSubscription(notificationListener);
-  //   Notifications.removeNotificationSubscription(responseListener);
-  // };
+  
 }, []);
 useEffect(() => {
+  
   const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
     console.log('Notification Received:', notification); // Check if the notification is being received
   });
@@ -161,54 +134,57 @@ useEffect(() => {
 }, []);
 
 
-const renderRide = ({ item }) => (
-  <TouchableOpacity style={styles.rideContainer}>
-    <Text style={styles.rideText}>Model: {item.vehicleDetails?.vehicle_model || 'N/A'}</Text>
-    <Text style={styles.rideText}>Color: {item.vehicleDetails?.vehicle_color || 'N/A'}</Text>
-    <Text style={styles.rideText}>Plate Number: {item.vehicleDetails?.vehicle_plate_number || 'N/A'}</Text>
-    <Text style={styles.rideText}>Seats Available: {item.availableSeats || 'N/A'}</Text>
-    <Text style={styles.rideText}>Price per Seat: {item.pricePerSeat || 'N/A'}</Text>
-    <Text style={styles.rideText}>Distance: {item.distance || '0'} km</Text>
-    <Text style={styles.rideText}>Driver Name: {item.driverDetails?.name || 'N/A'}</Text>
-    <Text style={styles.rideText}>Discounted Price: {item.discountedPrice || 'No Discount yet'}</Text>
-    <Text style={styles.rideText}>Status: {item.status || 'N/A'}</Text>
+  const renderRide = ({ item }) => (
+    <TouchableOpacity style={styles.rideContainer}>
+      <Text style={styles.rideText}>Model: {item.vehicleDetails?.vehicle_model || 'N/A'}</Text>
+      <Text style={styles.rideText}>Color: {item.vehicleDetails?.vehicle_color || 'N/A'}</Text>
+      <Text style={styles.rideText}>Plate Number: {item.vehicleDetails?.vehicle_plate_number || 'N/A'}</Text>
+      <Text style={styles.rideText}>Seats Available: {item.availableSeats || 'N/A'}</Text>
+      <Text style={styles.rideText}>Price per Seat: {item.pricePerSeat || 'N/A'}</Text>
+      <Text style={styles.rideText}>Distance: {item.distance||'0'} km</Text>
+      <Text style={styles.rideText}>DriverName: {item.driverDetails?.name||'N/A'} </Text>
+      <Text style={styles.rideText}>DiscountedPrice: {item.discountedPrice||'No Discout yet'} </Text>
+      
+     
 
-    {/* Display formatted starttime and endtime */}
-    <Text style={styles.rideText}>
-      Start Time: {new Date(item.starttime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) || 'N/A'}
-    </Text>
-    <Text style={styles.rideText}>
-      End Time: {new Date(item.endtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) || 'N/A'}
-    </Text>
 
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity
-        style={styles.callButton}
-        onPress={() => handleCallDriver(item.driverDetails?.phone)}
-      >
-        <Text style={styles.buttonText}>Call</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.requestButton}
-        onPress={() => handleSendRequest(item.driverId)}
-      >
-        <Text style={styles.buttonText}>Request</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.requestButton}
-        onPress={() => {
-          console.log('Driver ID:', item.driverId);
-          navigation.navigate('Rating', {
-            driverId: item.driverId,
-          });
-        }}
-      >
-        <Text style={styles.buttonText}>Complete</Text>
-      </TouchableOpacity>
-    </View>
-  </TouchableOpacity>
-);
+      <Text style={styles.rideText}>Status: {item.status || 'N/A'}</Text>
 
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.callButton}
+          onPress={() => handleCallDriver(item.driverDetails?.phone)}
+        >
+          <Text style={styles.buttonText}>Call</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.requestButton}
+          onPress={() => handleSendRequest(item.driverId)}
+        >
+          <Text style={styles.buttonText}>Request</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+  style={styles.requestButton}
+  onPress={() => {
+    
+    console.log('Driver ID:', item.driverId);
+  
+    navigation.navigate('Rating', {
+     
+      driverId: item.driverId,
+    
+    });
+  }}
+>
+  <Text style={styles.buttonText}>Complete</Text>
+</TouchableOpacity>
+
+
+
+
+      </View>
+    </TouchableOpacity>
+  );
 
   const handleSendRequest = async (driverId) => {
     try {
@@ -224,7 +200,7 @@ const renderRide = ({ item }) => (
         Alert.alert('Error', 'Passenger ID not found');
         return;
       }
-
+       console.log("pickup and drop",pickupCoordinates,dropCoordinates);
       const response = await axios.post(
         'https://ride-together-mybackend-manaal.onrender.com/api/v1/vehicle/book-ride',
         {

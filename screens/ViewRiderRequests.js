@@ -85,29 +85,9 @@ const savePushTokenToBackend = async (pushToken) => {
   }
 };
 
-  // useEffect(() => {
-  //   async function registerForPushNotificationsAsync() {
-  //     if (Platform.OS === 'android') {
-  //       Notifications.setNotificationChannelAsync('default', {
-  //         name: 'default',
-  //         importance: Notifications.AndroidImportance.MAX,
-  //       });
-  //     }
+ 
 
-  //     if (Device.isDevice) {
-  //       const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  //       let finalStatus = existingStatus;
-
-  //       if (existingStatus !== 'granted') {
-  //         const { status } = await Notifications.requestPermissionsAsync();
-  //         finalStatus = status;
-  //       }
-
-  //       if (finalStatus !== 'granted') {
-  //         console.log('Permission not granted');
-  //         return;
-  //       }
-
+ 
   //       try {
   //         const pushTokenString = (await Notifications.getExpoPushTokenAsync()).data;
   //         setExpoPushToken(pushTokenString);
